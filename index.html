@@ -203,30 +203,38 @@
     }
 
     function renderQuestion() {
-      const q = questions[current];
-      const percent = current === 5 ? 99 : Math.round(((current + 1) / questions.length) * 100);
+  const q = questions[current];
+  const percent = current === 5 ? 99 : Math.round(((current + 1) / questions.length) * 100);
 
-      const quizBox = document.getElementById("quiz");
-      quizBox.innerHTML = `
-        <img src="${q.img}" class="question-img" alt="질문 이미지">
-        <p>${q.q}</p>
-        <button onclick="answer('A')">A. ${q.A}</button>
-        <button onclick="answer('B')">B. ${q.B}</button>
-        <div class="progress-container">
-          <div class="progress-bar">
-            <div class="progress-bar-inner" id="progress"></div>
-          </div>
-          <div class="progress-text">${current + 1} / ${questions.length} (${percent}%)</div>
+  const quizBox = document.getElementById("quiz");
+  const img = new Image();
+  img.src = q.img;
+  img.className = 'question-img';
+  img.alt = '질문 이미지';
+
+  img.onload = () => {
+    quizBox.innerHTML = ''; // 초기화
+    quizBox.appendChild(img);
+    quizBox.innerHTML += `
+      <p>${q.q}</p>
+      <button onclick="answer('A')">A. ${q.A}</button>
+      <button onclick="answer('B')">B. ${q.B}</button>
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-bar-inner" id="progress"></div>
         </div>
-      `;
+        <div class="progress-text">${current + 1} / ${questions.length} (${percent}%)</div>
+      </div>
+    `;
 
-      const progress = document.getElementById("progress");
-      progress.style.width = `${previousPercent}%`;
-      setTimeout(() => {
-        progress.style.width = `${percent}%`;
-        previousPercent = percent;
-      }, 10);
-    }
+    const progress = document.getElementById("progress");
+    progress.style.width = `${previousPercent}%`;
+    setTimeout(() => {
+      progress.style.width = `${percent}%`;
+      previousPercent = percent;
+    }, 10);
+  };
+}
 
     function answer(choice) {
       const mapping = mappings[current][choice];
