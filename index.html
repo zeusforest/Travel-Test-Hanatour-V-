@@ -151,6 +151,22 @@
       border-radius: 10px;
       margin-bottom: 15px;
     }
+    
+    .fade-out {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+.fade-in {
+      opacity: 0;
+      animation: fadeIn 0.5s forwards;
+    }
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
 
     @media screen and (max-width: 480px) {
       body {
@@ -285,32 +301,41 @@ preloadedImages["에어텔"].src = "RE/IMG_3.jpg";
 }
 
 function answer(choice) {
-  // 선택한 버튼에 클릭 효과 주기
-  const buttons = document.querySelectorAll('#quiz button');
+  const quizBox = document.getElementById("quiz");
+
+  // 클릭된 버튼에 효과 주기
+  const buttons = quizBox.querySelectorAll('button');
   buttons.forEach(btn => {
     if (btn.textContent.startsWith(choice)) {
       btn.classList.add('clicked');
     }
-    btn.disabled = true; // 중복 클릭 방지
+    btn.disabled = true;
   });
 
-  // 점수 계산
+  // 퀴즈 박스에 페이드 아웃 효과
+  quizBox.classList.add('fade-out');
+
+  // 점수 처리
   const mapping = mappings[current][choice];
   for (let key in mapping) {
     score[key] += mapping[key];
   }
 
-  // 다음 질문으로 이동
   current++;
+
+  // 애니메이션 후 다음 질문 렌더링
   setTimeout(() => {
     if (current < questions.length) {
+      quizBox.classList.remove('fade-out');
       renderQuestion();
+      quizBox.classList.add('fade-in');
+      setTimeout(() => quizBox.classList.remove('fade-in'), 500);
     } else {
-      document.getElementById("quiz").classList.add("hidden");
+      quizBox.classList.add('hidden');
       document.getElementById("loading-screen").classList.remove("hidden");
       setTimeout(showResult, 2000);
     }
-  }, 100); // 클릭 애니메이션 시간만큼 살짝 딜레이
+  }, 500); // 페이드 아웃과 동일한 시간
 }
 
     function showResult() {
