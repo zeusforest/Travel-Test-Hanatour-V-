@@ -260,11 +260,24 @@ preloadedImages["에어텔"].src = "RE/IMG_3.jpg";
       fadeImgs[fadeIndex].classList.add("active");
     }, 2000);
 
-    function startTest() {
-      document.getElementById("start-screen").classList.add("hidden");
-      document.getElementById("quiz").classList.remove("hidden");
-      renderQuestion();
-    }
+function startTest() {
+  const startScreen = document.getElementById("start-screen");
+  const quiz = document.getElementById("quiz");
+
+  // 페이드 아웃 → 질문 페이드 인
+  startScreen.classList.add("fade-out");
+  setTimeout(() => {
+    startScreen.classList.add("hidden");
+    startScreen.classList.remove("fade-out");
+
+    quiz.classList.remove("hidden");
+    quiz.classList.add("fade-in");
+
+    renderQuestion();
+
+    setTimeout(() => quiz.classList.remove("fade-in"), 500);
+  }, 500);
+}
 
     function renderQuestion() {
   const q = questions[current];
@@ -377,14 +390,28 @@ document.getElementById("result").innerHTML = `
 `;
     }
 
-    function restart() {
-      current = 0;
-      previousPercent = 0;
-      score = { "단체 패키지": 0, "우리끼리": 0, "에어텔": 0 };
-      document.getElementById("result").classList.add("hidden");
-      document.getElementById("quiz").classList.remove("hidden");
-      renderQuestion();
-    }
+function restart() {
+  const result = document.getElementById("result");
+  const quiz = document.getElementById("quiz");
+
+  // 페이드 아웃 결과 → 퀴즈 화면으로 페이드 인
+  result.classList.add("fade-out");
+  setTimeout(() => {
+    result.classList.add("hidden");
+    result.classList.remove("fade-out");
+
+    current = 0;
+    previousPercent = 0;
+    score = { "단체 패키지": 0, "우리끼리": 0, "에어텔": 0 };
+
+    quiz.classList.remove("hidden");
+    quiz.classList.add("fade-in");
+
+    renderQuestion();
+
+    setTimeout(() => quiz.classList.remove("fade-in"), 500);
+  }, 500);
+}
   </script>
 </body>
 </html>
