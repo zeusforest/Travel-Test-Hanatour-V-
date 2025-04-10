@@ -9,18 +9,22 @@
   max-width: 100%;
   overflow-x: hidden;
   box-sizing: border-box;
-    }
+}
+
 *, *::before, *::after {
   box-sizing: inherit;
-    }
+}
 
-.card, .result {
-  max-width: 500px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 25px;
+.card, .result, .fade-images, .question-img {
   box-sizing: border-box;
-    }
+}
+
+.card {
+  max-width: 500px;
+  width: calc(100% - 40px);
+  margin: 0 auto 20px;
+  padding: 25px;
+}
     
     body {
       font-family: 'Arial', sans-serif;
