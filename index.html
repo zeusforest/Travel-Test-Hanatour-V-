@@ -303,7 +303,7 @@ preloadedImages["에어텔"].src = "RE/IMG_3.jpg";
 function answer(choice) {
   const quizBox = document.getElementById("quiz");
 
-  // 클릭된 버튼에 효과 주기
+  // 버튼 클릭 효과
   const buttons = quizBox.querySelectorAll('button');
   buttons.forEach(btn => {
     if (btn.textContent.startsWith(choice)) {
@@ -311,9 +311,6 @@ function answer(choice) {
     }
     btn.disabled = true;
   });
-
-  // 퀴즈 박스에 페이드 아웃 효과
-  quizBox.classList.add('fade-out');
 
   // 점수 처리
   const mapping = mappings[current][choice];
@@ -323,19 +320,27 @@ function answer(choice) {
 
   current++;
 
-  // 애니메이션 후 다음 질문 렌더링
-  setTimeout(() => {
-    if (current < questions.length) {
+  // 질문 6 → 결과 페이지로 넘어갈 때만 페이드 효과 적용
+  if (current >= questions.length) {
+    // 페이드 아웃
+    quizBox.classList.add('fade-out');
+    setTimeout(() => {
+      quizBox.classList.add("hidden");
       quizBox.classList.remove('fade-out');
-      renderQuestion();
-      quizBox.classList.add('fade-in');
-      setTimeout(() => quizBox.classList.remove('fade-in'), 500);
-    } else {
-      quizBox.classList.add('hidden');
       document.getElementById("loading-screen").classList.remove("hidden");
-      setTimeout(showResult, 2000);
-    }
-  }, 500); // 페이드 아웃과 동일한 시간
+
+      // 로딩 후 결과 페이드 인
+      setTimeout(() => {
+        showResult();
+        const resultBox = document.getElementById("result");
+        resultBox.classList.add("fade-in");
+        setTimeout(() => resultBox.classList.remove("fade-in"), 500);
+      }, 2000);
+    }, 500);
+  } else {
+    // 질문 간 전환은 부드러운 애니메이션 없이 바로 렌더링
+    renderQuestion();
+  }
 }
 
     function showResult() {
